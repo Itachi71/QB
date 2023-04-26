@@ -73,7 +73,13 @@
       renderer.code = function(code, language) {
         return '<pre><code class="' + language + '">' + code + '</code></pre>';
       };
-      marked.setOptions({ renderer: renderer });
+
+      // Enable GitHub Flavored Markdown and table support
+      marked.setOptions({
+        gfm: true,
+        tables: true,
+        renderer: renderer
+      });
 
       var htmlOutput = marked(markdownInput);
       var previewOutput = document.getElementById('previewOutput');
