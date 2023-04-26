@@ -3,9 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HTML to Markdown Converter</title>
+  <title>HTML to Markdown</title>
   <script src="https://unpkg.com/turndown@7.1.1/dist/turndown.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/3.0.8/marked.min.js"></script>
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/monokai.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
   <style>
     .container {
       display: flex;
@@ -64,10 +66,21 @@
     }
 
     function showMarkdownPreview() {
-      var markdownInput = document.getElementById('markdownOutput').value; // Read value from markdownOutput textarea directly
+      var markdownInput = document.getElementById('markdownOutput').value;
       var htmlOutput = marked(markdownInput);
       var previewOutput = document.getElementById('previewOutput');
       previewOutput.contentDocument.body.innerHTML = htmlOutput;
+
+      // Add highlight.js CSS to the iframe
+      var cssLink = document.createElement('link');
+      cssLink.href = '//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/monokai.min.css';
+      cssLink.rel = 'stylesheet';
+      previewOutput.contentDocument.head.appendChild(cssLink);
+
+      // Highlight code blocks in the iframe
+      previewOutput.contentDocument.querySelectorAll('pre code').forEach((block) => {
+        hljs.highlightElement(block);
+      });
 
       // Update plain text output
       var plainTextOutput = document.getElementById('plainTextOutput');
