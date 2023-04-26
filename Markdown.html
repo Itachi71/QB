@@ -22,12 +22,12 @@
       overflow-y: scroll;
       padding: 10px;
     }
-      #previewOutput blockquote {
-    border-left: 4px solid #ccc;
-    padding-left: 1em;
-    margin: 1em 0;
-  }
-
+    /* Add the following blockquote CSS */
+    #previewOutput blockquote {
+      border-left: 4px solid #ccc;
+      padding-left: 1em;
+      margin: 1em 0;
+    }
   </style>
 </head>
 <body>
@@ -88,19 +88,6 @@
             return '|' + content;
           }
         }
-        turndownService.addRule('blockquotes', {
-  filter: 'blockquote',
-  replacement: function(content, node) {
-    let nestedLevel = 0;
-    let currentNode = node;
-    while (currentNode.parentNode && currentNode.parentNode.nodeName === 'BLOCKQUOTE') {
-      nestedLevel++;
-      currentNode = currentNode.parentNode;
-    }
-    const blockquotePrefix = '> '.repeat(nestedLevel + 1);
-    return blockquotePrefix + content.replace(/\n/g, '\n' + blockquotePrefix);
-  }
-});
       });
 
       turndownService.addRule('blockquotes', {
