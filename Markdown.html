@@ -9,6 +9,17 @@
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/monokai.min.css">
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
   <style>
+  .textbox-container {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+.copy-btn {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  cursor: pointer;
+}
   .container {
     display: flex;
   }
@@ -54,16 +65,28 @@
 <body>
   <div class="container">
     <div class="input-section">
-      <textarea id="htmlInput" rows="10" cols="80" placeholder="Enter your HTML code here"></textarea>
+      <div class="textbox-container">
+        <textarea id="htmlInput" rows="10" cols="80" placeholder="Enter your HTML code here"></textarea>
+        <span class="copy-btn" onclick="copyText(this)">Copy</span>
+      </div>
       <br>
       <button id="convertButton">Convert</button>
       <button id="previewButton">Preview</button>
       <br>
-      <textarea id="markdownOutput" rows="10" cols="80" placeholder="Markdown input-output"></textarea>
+      <div class="textbox-container">
+        <textarea id="markdownOutput" rows="10" cols="80" placeholder="Markdown input-output"></textarea>
+        <span class="copy-btn" onclick="copyText(this)">Copy</span>
+      </div>
       <br>
-      <textarea id="plainTextOutput" rows="10" cols="80" placeholder="Plain text output will appear here"></textarea>
+      <div class="textbox-container">
+        <textarea id="plainTextOutput" rows="10" cols="80" placeholder="Plain text output will appear here"></textarea>
+        <span class="copy-btn" onclick="copyText(this)">Copy</span>
+      </div>
     </div>
-    <div id="previewOutput" rows="33" cols="80"></div>
+    <div class="textbox-container">
+      <div id="previewOutput" rows="33" cols="80"></div>
+      <span class="copy-btn" onclick="copyText(this)">Copy</span>
+    </div>
   </div>
 
   <script>
@@ -153,6 +176,11 @@
 
     document.getElementById('convertButton').addEventListener('click', convertHtmlToMarkdown);
     document.getElementById('previewButton').addEventListener('click', showMarkdownPreview);
+  function copyText(element) {
+    const textarea = element.previousElementSibling;
+    textarea.select();
+    document.execCommand("copy");
+}
   </script>
 </body>
 </html>
