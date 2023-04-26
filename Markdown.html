@@ -22,6 +22,12 @@
       overflow-y: scroll;
       padding: 10px;
     }
+      #previewOutput blockquote {
+    border-left: 4px solid #ccc;
+    padding-left: 1em;
+    margin: 1em 0;
+  }
+
   </style>
 </head>
 <body>
@@ -65,6 +71,42 @@
           } else {
             return content;
           }
+        }
+      });
+
+      // Custom rules for tables and blockquotes
+      turndownService.addRule('tables', {
+        filter: ['table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td'],
+        replacement: function(content, node) {
+          if (node.nodeName === 'TABLE') {
+            return '\n\n' + content + '\n\n';
+          } else if (node.nodeName === 'THEAD' || node.nodeName === 'TBODY' || node.nodeName === 'TFOOT') {
+            return content;
+          } else if (node.nodeName === 'TR') {
+            return content + '\n';
+          } else if (node.nodeName === 'TH' || node.nodeName === 'TD') {
+            return '|' + content;
+          }
+        }
+        turndownService.addRule('blockquotes', {
+  filter: 'blockquote',
+  replacement: function(content, node) {
+    let nestedLevel = 0;
+    let currentNode = node;
+    while (currentNode.parentNode && currentNode.parentNode.nodeName === 'BLOCKQUOTE') {
+      nestedLevel++;
+      currentNode = currentNode.parentNode;
+    }
+    const blockquotePrefix = '> '.repeat(nestedLevel + 1);
+    return blockquotePrefix + content.replace(/\n/g, '\n' + blockquotePrefix);
+  }
+});
+      });
+
+      turndownService.addRule('blockquotes', {
+        filter: 'blockquote',
+        replacement: function(content) {
+          return '> ' + content;
         }
       });
 
