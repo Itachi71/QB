@@ -1,30 +1,35 @@
+Here's the code for a random inspirational quote generator:
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HTML Converters</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-    }
-    nav {
-      display: inline-block;
-      margin-top: 50px;
-    }
-    nav a {
-      display: block;
-      text-decoration: none;
-      color: #333;
-      margin: 10px;
-      font-size: 24px;
-    }
-  </style>
+  <title>Random Inspirational Quote Generator</title>
 </head>
 <body>
-  <nav>
+    <nav>
     <a href="Markdown.html">Markdown Converter</a>
   </nav>
+  
+  <h2>Random Inspirational Quote</h2>
+  <p id="quoteText"></p>
+  <p id="quoteAuthor"></p>
+  <button id="quoteButton">Get a new quote</button>
+
+  <script>
+    async function fetchRandomQuote() {
+      const response = await fetch('https://api.quotable.io/random');
+      const data = await response.json();
+      document.getElementById('quoteText').innerHTML = `"${data.content}"`;
+      document.getElementById('quoteAuthor').innerHTML = `- ${data.author}`;
+    }
+
+    document.getElementById('quoteButton').addEventListener('click', fetchRandomQuote);
+
+    // Fetch an initial quote when the page loads
+    fetchRandomQuote();
+  </script>
 </body>
 </html>
