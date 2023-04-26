@@ -3,10 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Random Inspirational Quote Generator</title>
+  <title>Random Inspirational Quote Generator & RSS Feed Display</title>
+  <style>
+    .rss-item {
+      border-bottom: 1px solid #ccc;
+      padding: 10px 0;
+    }
+    .rss-item a {
+      text-decoration: none;
+      color: #333;
+    }
+    .rss-item a:hover {
+      color: #007bff;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/rss-parser@3.10.0/dist/rss-parser.min.js"></script>
 </head>
 <body>
-    <nav>
+  <nav>
     <a href="Markdown.html">Markdown Converter</a>
   </nav>
 
@@ -14,6 +28,9 @@
   <p id="quoteText"></p>
   <p id="quoteAuthor"></p>
   <button id="quoteButton">Get a new quote</button>
+
+  <h2>RSS Feed Content</h2>
+  <div id="rssContent"></div>
 
   <script>
     async function fetchRandomQuote() {
@@ -27,6 +44,30 @@
 
     // Fetch an initial quote when the page loads
     fetchRandomQuote();
+
+    const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
+    const RSS_URL = "https://www.soccerstats247.com/DailyMatchFeed.aspx?langId=1";
+
+    async function fetchRSSFeed() {
+      let parser = new RSSParser();
+      const feed = await parser.parseURL(CORS_PROXY + RSS_URL);
+
+      let rssContentHTML = '<h2>' + feed.title + '</h2>';
+
+      feed.items.forEach(item => {
+        rssContentHTML += `
+          <div class="rss-item">
+            <h3><a href="${item.link}" target="_blank">${item.title}</a></h3>
+            <p>${item.pubDate}</p>
+          </div>
+        `;
+      });
+
+      document.getElementById('rssContent').innerHTML = rssContentHTML;
+    }
+
+    // Fetch the RSS feed and display its content when the page loads
+    fetchRSSFeed();
   </script>
 </body>
 </html>
