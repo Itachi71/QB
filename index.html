@@ -30,6 +30,10 @@ function convertHtmlToMarkdown() {
   var htmlInput = document.getElementById('htmlInput').value;
   var turndownService = new window.TurndownService();
 
+  turndownService.keep(function(node) {
+    return node.style.fontStyle === 'italic' || node.style.fontWeight >= 600 || node.style.textDecoration === 'line-through';
+  });
+
   turndownService.addRule('customStyles', {
     filter: ['span'],
     replacement: function(content, node) {
@@ -53,7 +57,7 @@ function convertHtmlToMarkdown() {
   document.getElementById('markdownOutput').value = markdown;
 }
 
-document.getElementById('convertButton').addEventListener('click', convertHtmlToMarkdown);  </script>
+document.getElementById('convertButton').addEventListener('click', convertHtmlToMarkdown); </script>
 </body>
 </html>
 
