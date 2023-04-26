@@ -28,7 +28,7 @@
   }
   #previewOutput {
     width: 100%;
-    height: calc(30 * 1.2em);
+    height: 30px;
     border: 1px solid #ccc;
     overflow: auto;
     resize: both;
@@ -67,7 +67,7 @@
   <div class="container">
     <div class="input-section">
       <div class="textbox-container">
-        <textarea id="htmlInput" rows="10" cols="80" placeholder="Enter your HTML code here"></textarea>
+        <textarea id="htmlInput" rows="9" cols="80" placeholder="Enter your HTML code here"></textarea>
         <span class="copy-btn" onclick="copyText(this)">Copy</span>
       </div>
       <br>
@@ -75,17 +75,17 @@
       <button id="previewButton">Preview</button>
       <br>
       <div class="textbox-container">
-        <textarea id="markdownOutput" rows="10" cols="80" placeholder="Markdown input-output"></textarea>
+        <textarea id="markdownOutput" rows="9" cols="80" placeholder="Markdown input-output"></textarea>
         <span class="copy-btn" onclick="copyText(this)">Copy</span>
       </div>
       <br>
       <div class="textbox-container">
-        <textarea id="plainTextOutput" rows="10" cols="80" placeholder="Plain text output will appear here"></textarea>
+        <textarea id="plainTextOutput" rows="9" cols="80" placeholder="Plain text output will appear here"></textarea>
         <span class="copy-btn" onclick="copyText(this)">Copy</span>
       </div>
     </div>
     <div class="textbox-container">
-      <div id="previewOutput" rows="33" cols="80"></div>
+      <div id="previewOutput" rows="30" cols="80"></div>
       <span class="copy-btn" onclick="copyText(this)">Copy</span>
     </div>
   </div>
