@@ -5,14 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HTML to Markdown Converter</title>
   <script src="https://unpkg.com/turndown@7.1.1/dist/turndown.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
   <h2>HTML to Markdown Converter</h2>
   <textarea id="htmlInput" rows="10" cols="80" placeholder="Enter your HTML code here"></textarea>
   <br>
   <button id="convertButton">Convert</button>
+  <button id="previewButton">Preview</button>
   <br>
   <textarea id="markdownOutput" rows="10" cols="80" placeholder="Markdown output will appear here" readonly></textarea>
+  <br>
+  <iframe id="previewOutput" style="width: 100%; height: 300px; border: 1px solid #ccc;" title="Markdown Preview"></iframe>
 
   <script>
     function convertHtmlToMarkdown() {
@@ -46,7 +50,15 @@
       document.getElementById('markdownOutput').value = markdown;
     }
 
+    function showMarkdownPreview() {
+      var markdownInput = document.getElementById('markdownOutput').value;
+      var htmlOutput = marked(markdownInput);
+      var previewOutput = document.getElementById('previewOutput');
+      previewOutput.contentDocument.body.innerHTML = htmlOutput;
+    }
+
     document.getElementById('convertButton').addEventListener('click', convertHtmlToMarkdown);
+    document.getElementById('previewButton').addEventListener('click', showMarkdownPreview);
   </script>
 </body>
 </html>
