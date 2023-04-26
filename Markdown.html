@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HTML to Markdown</title>
+  <title>HTML to Markdown Converter</title>
   <script src="https://unpkg.com/turndown@7.1.1/dist/turndown.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/3.0.8/marked.min.js"></script>
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/monokai.min.css">
@@ -67,6 +67,14 @@
 
     function showMarkdownPreview() {
       var markdownInput = document.getElementById('markdownOutput').value;
+
+      // Customize the marked renderer to include the language class in the <code> tags
+      var renderer = new marked.Renderer();
+      renderer.code = function(code, language) {
+        return '<pre><code class="' + language + '">' + code + '</code></pre>';
+      };
+      marked.setOptions({ renderer: renderer });
+
       var htmlOutput = marked(markdownInput);
       var previewOutput = document.getElementById('previewOutput');
       previewOutput.contentDocument.body.innerHTML = htmlOutput;
