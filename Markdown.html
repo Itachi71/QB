@@ -28,6 +28,7 @@
   }
   #previewOutput {
     width: 100%;
+    height: calc(30 * 1.2em);
     border: 1px solid #ccc;
     overflow: auto;
     resize: both;
@@ -177,9 +178,20 @@
     document.getElementById('convertButton').addEventListener('click', convertHtmlToMarkdown);
     document.getElementById('previewButton').addEventListener('click', showMarkdownPreview);
   function copyText(element) {
-    const textarea = element.previousElementSibling;
-    textarea.select();
-    document.execCommand("copy");
+  let textarea;
+  if (element.id === "copyPreviewOutput") {
+    const previewOutput = element.previousElementSibling;
+    textarea = document.createElement("textarea");
+    textarea.value = previewOutput.innerHTML;
+    document.body.appendChild(textarea);
+  } else {
+    textarea = element.previousElementSibling;
+  }
+  textarea.select();
+  document.execCommand("copy");
+  if (element.id === "copyPreviewOutput") {
+    document.body.removeChild(textarea);
+  }
 }
   </script>
 </body>
