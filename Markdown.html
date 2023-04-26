@@ -9,45 +9,46 @@
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/monokai.min.css">
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
   <style>
-    .container {
-      display: flex;
-    }
-    .input-section {
-      margin-right: 20px;
-    }
-    #previewOutput {
-      width: 100%;
-      height: 300px;
-      border: 1px solid #ccc;
-      overflow-y: scroll;
-      padding: 10px;
-    }
-    /* Add the following blockquote CSS */
-    #previewOutput blockquote {
-      border-left: 4px solid #ccc;
-      padding-left: 1em;
-      margin: 1em 0;
-    }
-    #previewOutput table {
-      border-collapse: collapse;
-      border-spacing: 0;
-      width: 100%;
-      margin-bottom: 1em;
-    }
-    #previewOutput table th,
-    #previewOutput table td {
-  border: 1px solid #ccc;
-  padding: 6px 13px;
-  text-align: left;
-    }
-    #previewOutput table th {
-      font-weight: bold;
-    }
-    #previewOutput code {
-      background-color: #f0f0f0;
-      padding: 2px 4px;
-      border-radius: 3px;
-    }
+  .container {
+    display: flex;
+  }
+  .input-section {
+    margin-right: 20px;
+  }
+  #previewOutput {
+    width: 100%;
+    height: 300px;
+    border: 1px solid #ccc;
+    overflow-y: scroll;
+    padding: 10px;
+  }
+  /* Add the following blockquote CSS */
+  #previewOutput blockquote {
+    border-left: 4px solid #ccc;
+    padding-left: 1em;
+    margin: 1em 0;
+  }
+  #previewOutput table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    margin-bottom: 1em;
+  }
+  #previewOutput table th,
+  #previewOutput table td {
+    border: 1px solid #ccc;
+    padding: 6px 13px;
+    text-align: left;
+  }
+  #previewOutput table th {
+    font-weight: bold;
+  }
+  /* Updated CSS rule for inline code elements */
+  #previewOutput :not(pre) > code {
+    background-color: #f0f0f0;
+    padding: 2px 4px;
+    border-radius: 3px;
+  }
   </style>
 </head>
 <body>
