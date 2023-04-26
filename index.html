@@ -3,73 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HTML to Markdown Converter</title>
-  <script src="https://unpkg.com/turndown@7.1.1/dist/turndown.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/3.0.8/marked.min.js"></script>
+  <title>HTML Converters</title>
   <style>
-    .container {
-      display: flex;
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
     }
-    .input-section {
-      margin-right: 20px;
+    nav {
+      display: inline-block;
+      margin-top: 50px;
+    }
+    nav a {
+      display: block;
+      text-decoration: none;
+      color: #333;
+      margin: 10px;
+      font-size: 24px;
     }
   </style>
 </head>
 <body>
-  <h2>HTML to Markdown Converter</h2>
-  <div class="container">
-    <div class="input-section">
-      <textarea id="htmlInput" rows="10" cols="80" placeholder="Enter your HTML code here"></textarea>
-      <br>
-      <button id="convertButton">Convert</button>
-      <button id="previewButton">Preview</button>
-      <br>
-      <textarea id="markdownOutput" rows="10" cols="80" placeholder="Markdown output will appear here"></textarea>
-    </div>
-    <iframe id="previewOutput" style="width: 100%; height: 300px; border: 1px solid #ccc;" title="Markdown Preview"></iframe>
-  </div>
-
-  <script>
-    function convertHtmlToMarkdown() {
-      var htmlInput = document.getElementById('htmlInput').value;
-      var turndownService = new window.TurndownService();
-
-      turndownService.keep(function(node) {
-        return node.style.fontStyle === 'italic' || node.style.fontWeight >= 600 || node.style.textDecoration === 'line-through';
-      });
-
-      turndownService.addRule('customStyles', {
-        filter: ['span'],
-        replacement: function(content, node) {
-          var fontStyle = node.style.fontStyle;
-          var fontWeight = node.style.fontWeight;
-          var textDecoration = node.style.textDecoration;
-
-          if (fontStyle === 'italic') {
-            return '_' + content + '_';
-          } else if (fontWeight >= 600) {
-            return '**' + content + '**';
-          } else if (textDecoration === 'line-through') {
-            return '~~' + content + '~~';
-          } else {
-            return content;
-          }
-        }
-      });
-
-      var markdown = turndownService.turndown(htmlInput);
-      document.getElementById('markdownOutput').value = markdown;
-    }
-
-    function showMarkdownPreview() {
-      var markdownInput = document.getElementById('markdownOutput').value; // Read value from markdownOutput textarea directly
-      var htmlOutput = marked(markdownInput);
-      var previewOutput = document.getElementById('previewOutput');
-      previewOutput.contentDocument.body.innerHTML = htmlOutput;
-    }
-
-    document.getElementById('convertButton').addEventListener('click', convertHtmlToMarkdown);
-    document.getElementById('previewButton').addEventListener('click', showMarkdownPreview);
-  </script>
+  <h1>HTML Converters</h1>
+  <nav>
+    <a href="Markdown.html">Markdown Converter</a>
+    <a href="LaTeX.html">LaTeX Converter</a>
+  </nav>
 </body>
 </html>
