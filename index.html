@@ -6,17 +6,28 @@
   <title>HTML to Markdown Converter</title>
   <script src="https://unpkg.com/turndown@7.1.1/dist/turndown.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/3.0.8/marked.min.js"></script>
+  <style>
+    .container {
+      display: flex;
+    }
+    .input-section {
+      margin-right: 20px;
+    }
+  </style>
 </head>
 <body>
   <h2>HTML to Markdown Converter</h2>
-  <textarea id="htmlInput" rows="10" cols="80" placeholder="Enter your HTML code here"></textarea>
-  <br>
-  <button id="convertButton">Convert</button>
-  <button id="previewButton">Preview</button>
-  <br>
-  <textarea id="markdownOutput" rows="10" cols="80" placeholder="Markdown output will appear here"></textarea>
-  <br>
-  <iframe id="previewOutput" style="width: 100%; height: 300px; border: 1px solid #ccc;" title="Markdown Preview"></iframe>
+  <div class="container">
+    <div class="input-section">
+      <textarea id="htmlInput" rows="10" cols="80" placeholder="Enter your HTML code here"></textarea>
+      <br>
+      <button id="convertButton">Convert</button>
+      <button id="previewButton">Preview</button>
+      <br>
+      <textarea id="markdownOutput" rows="10" cols="80" placeholder="Markdown output will appear here"></textarea>
+    </div>
+    <iframe id="previewOutput" style="width: 100%; height: 300px; border: 1px solid #ccc;" title="Markdown Preview"></iframe>
+  </div>
 
   <script>
     function convertHtmlToMarkdown() {
