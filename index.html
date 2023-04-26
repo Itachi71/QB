@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QB</title>
+</head>
+<body>
+  <h1>QB Bookmarklets</h1>
+  <ul>
+    <li><a href="javascript:(function() {  var selectedContent = window.getSelection();  if (selectedContent) {    var htmlContent = '';    for (var i = 0; i < selectedContent.rangeCount; i++) {      var range = selectedContent.getRangeAt(i);      var div = document.createElement('div');      div.appendChild(range.cloneContents());      htmlContent += div.innerHTML;    }    var newWindow = window.open();    newWindow.document.write(htmlContent);    newWindow.document.close();  } else {    alert("No content is selected.");  }})();">Export HTML from Notion</a></li>
+
+    <li><a href="javascript:(function() {  var selectedHTML = window.getSelection().getRangeAt(0).cloneContents();  var div = document.createElement('div');  div.appendChild(selectedHTML);  var htmlContent = div.innerHTML;  var temp = document.createElement('textarea');  temp.value = htmlContent;  document.body.appendChild(temp);  temp.select();  document.execCommand('copy');  document.body.removeChild(temp);  alert('HTML content copied to clipboard');})();">Copy HTML to Clipboard</a></li>
+
+    <li><a href="javascript:(function() {  function createScriptElement(url) {    var script = document.createElement('script');    script.type = 'text/javascript';    script.src = url;    return script;  }  function convertHtmlToMarkdown() {    var htmlInput = prompt('Please enter the HTML code:');    if (htmlInput === null) return;    var turndownService = new window.TurndownService();    turndownService.addRule('customStyles', {      filter: ['span'],      replacement: function(content, node) {        var fontStyle = node.style.fontStyle;        var fontWeight = node.style.fontWeight;        var textDecoration = node.style.textDecoration;        if (fontStyle === 'italic') {          return '_' + content + '_';        } else if (fontWeight >= 600) {          return '**' + content + '**';        } else if (textDecoration === 'line-through') {          return '~~' + content + '~~';        } else {          return content;        }      }    });    var markdown = turndownService.turndown(htmlInput);    prompt('Here is the Markdown equivalent:', markdown);  }  if (typeof window.TurndownService === 'undefined') {    var turndownScript = createScriptElement('https://unpkg.com/turndown@7.1.1/dist/turndown.js');    turndownScript.onload = function() {      setTimeout(convertHtmlToMarkdown, 500);    };    document.body.appendChild(turndownScript);  } else {    convertHtmlToMarkdown();  }})();">Convert HTML to MD</a></li>
+
+    <li><a href="javascript:(function() {  function loadScript(url, callback) {    var script = document.createElement('script');    script.type = 'text/javascript';    script.src = url;    script.onload = callback;    document.body.appendChild(script);  }  function showMarkdownPreview() {    var markdownInput = prompt('Enter the Markdown text:');    if (markdownInput !== null) {      var htmlOutput = marked(markdownInput);      var previewWindow = window.open('', '_blank');      previewWindow.document.write('<!DOCTYPE html><html><head><title>Markdown Preview</title></head><body>');      previewWindow.document.write(htmlOutput);      previewWindow.document.write('</body></html>');      previewWindow.document.close();    }  }  if (typeof marked === 'undefined') {    loadScript('https://cdn.jsdelivr.net/npm/marked/marked.min.js', showMarkdownPreview);  } else {    showMarkdownPreview();  }})();">Preview MD</a></li>
+    <!-- Add more list items for other bookmarklets -->
+  </ul>
+</body>
+</html>
