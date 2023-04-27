@@ -38,7 +38,8 @@
       convertButton.addEventListener("click", function() {
         var input = document.getElementById("latex-input").value;
         var output = document.getElementById("preview-output");
-        output.innerHTML = input;
+        output.innerHTML = '';
+        output.appendChild(document.createTextNode(input));
         try {
           MathJax.typesetClear();
           MathJax.typesetPromise([output]);
