@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <title>LaTeX Preview using KaTeX</title>
   <!-- Include the KaTeX library and its CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css" integrity="sha384-R4558gYOUz8mP9V6bNfrf5Gri6z4C6dyQV7lS9OeaxMHV6bujj6fsy5ma5i5Mi5y" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
 </head>
 <body>
   <h1>LaTeX Preview using KaTeX</h1>
@@ -17,23 +17,23 @@
   <h2>Preview:</h2>
   <div id="preview-output" style="border: 1px solid #ccc; padding: 1em; min-height: 2em;"></div>
 
-<!-- Render the LaTeX using KaTeX -->
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    var convertButton = document.getElementById("convert-button");
-    
-    convertButton.addEventListener("click", function() {
-      var input = document.getElementById("latex-input").value;
-      var output = document.getElementById("preview-output");
-      try {
-        katex.render(input, output);
-        output.style.color = 'black';
-      } catch (error) {
-        output.innerHTML = 'Error: ' + error.message;
-        output.style.color = 'red';
-      }
+  <!-- Render the LaTeX using KaTeX -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var convertButton = document.getElementById("convert-button");
+      
+      convertButton.addEventListener("click", function() {
+        var input = document.getElementById("latex-input").value;
+        var output = document.getElementById("preview-output");
+        try {
+          katex.render(input, output);
+          output.style.color = 'black';
+        } catch (error) {
+          output.innerHTML = 'Error: ' + error.message;
+          output.style.color = 'red';
+        }
+      });
     });
-  });
-</script>
+  </script>
 </body>
 </html>
