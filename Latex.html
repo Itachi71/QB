@@ -3,9 +3,10 @@
 <head>
   <meta charset="utf-8">
   <title>LaTeX Preview using KaTeX</title>
-  <!-- Include the KaTeX library and its CSS -->
+  <!-- Include the KaTeX library, its CSS, and auto-render script -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css">
   <script src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/auto-render.min.js"></script>
 </head>
 <body>
   <h1>LaTeX Preview using KaTeX</h1>
@@ -17,23 +18,31 @@
   <h2>Preview:</h2>
   <div id="preview-output" style="border: 1px solid #ccc; padding: 1em; min-height: 2em;"></div>
 
-<!-- Render the LaTeX using KaTeX -->
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    var convertButton = document.getElementById("convert-button");
-    
-    convertButton.addEventListener("click", function() {
-      var input = document.getElementById("latex-input").value;
-      var output = document.getElementById("preview-output");
-      try {
-        katex.render(input, output);
-        output.style.color = 'black';
-      } catch (error) {
-        output.innerHTML = 'Error: ' + error.message;
-        output.style.color = 'red';
-      }
+  <!-- Render the LaTeX using KaTeX -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var convertButton = document.getElementById("convert-button");
+      
+      convertButton.addEventListener("click", function() {
+        var input = document.getElementById("latex-input").value;
+        var output = document.getElementById("preview-output");
+        output.innerHTML = input;
+        try {
+          renderMathInElement(output, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '\\[', right: '\\]', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false}
+            ]
+          });
+          output.style.color = 'black';
+        } catch (error) {
+          output.innerHTML = 'Error: ' + error.message;
+          output.style.color = 'red';
+        }
+      });
     });
-  });
-</script>
+  </script>
 </body>
 </html>
