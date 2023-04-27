@@ -24,11 +24,9 @@
     
     convertButton.addEventListener("click", function() {
       var input = document.getElementById("latex-input").value;
-      // Escape $ symbols in the input
-      var escapedInput = input.replace(/[$]/g, '\\$');
       var output = document.getElementById("preview-output");
       try {
-        katex.render(escapedInput, output);
+        katex.render(input, output);
         output.style.color = 'black';
       } catch (error) {
         output.innerHTML = 'Error: ' + error.message;
