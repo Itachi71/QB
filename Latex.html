@@ -17,23 +17,25 @@
   <h2>Preview:</h2>
   <div id="preview-output" style="border: 1px solid #ccc; padding: 1em; min-height: 2em;"></div>
 
-  <!-- Render the LaTeX using KaTeX -->
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      var convertButton = document.getElementById("convert-button");
-      
-      convertButton.addEventListener("click", function() {
-        var input = document.getElementById("latex-input").value;
-        var output = document.getElementById("preview-output");
-        try {
-          katex.render(input, output);
-          output.style.color = 'black';
-        } catch (error) {
-          output.innerHTML = 'Error: ' + error.message;
-          output.style.color = 'red';
-        }
-      });
+<!-- Render the LaTeX using KaTeX -->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var convertButton = document.getElementById("convert-button");
+    
+    convertButton.addEventListener("click", function() {
+      var input = document.getElementById("latex-input").value;
+      // Escape $ symbols in the input
+      var escapedInput = input.replace(/[$]/g, '\\$');
+      var output = document.getElementById("preview-output");
+      try {
+        katex.render(escapedInput, output);
+        output.style.color = 'black';
+      } catch (error) {
+        output.innerHTML = 'Error: ' + error.message;
+        output.style.color = 'red';
+      }
     });
-  </script>
+  });
+</script>
 </body>
 </html>
