@@ -3,22 +3,34 @@
 <head>
   <meta charset="utf-8">
   <title>LaTeX Preview</title>
-  <!-- Include the KaTeX library, its CSS, and auto-render script -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/auto-render.min.js"></script>
+  <!-- Include the MathJax library -->
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+  </script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 </head>
 <body>
   <h1>LaTeX Preview</h1>
   <p>Enter your LaTeX code below:</p>
   
-  <textarea id="latex-input" rows="4" cols="50" style="display: block;"></textarea>
+  <textarea id="latex-input" rows="10" cols="50" style="display: block;"></textarea>
   <button id="convert-button">Convert</button>
   
   <h2>Preview:</h2>
   <div id="preview-output" style="border: 1px solid #ccc; padding: 1em; min-height: 2em;"></div>
 
-  <!-- Render the LaTeX using KaTeX -->
+  <!-- Render the LaTeX using MathJax -->
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       var convertButton = document.getElementById("convert-button");
@@ -28,14 +40,8 @@
         var output = document.getElementById("preview-output");
         output.innerHTML = input;
         try {
-          renderMathInElement(output, {
-            delimiters: [
-              {left: '$$', right: '$$', display: true},
-              {left: '\\[', right: '\\]', display: true},
-              {left: '$', right: '$', display: false},
-              {left: '\\(', right: '\\)', display: false}
-            ]
-          });
+          MathJax.typesetClear();
+          MathJax.typesetPromise([output]);
           output.style.color = 'black';
         } catch (error) {
           output.innerHTML = 'Error: ' + error.message;
@@ -46,3 +52,13 @@
   </script>
 </body>
 </html>
+```
+
+Now, you can input the modified LaTeX code I provided earlier, and it should render correctly:
+
+```
+\begin{array}{cccc}
+    & \textrm{CP}\\ [2ex]
+    \textrm{Spec} &   &\textrm{C$'$}\\ [2ex]
+        &\textrm{C} & & \textrm{SAgrP}
+\end{array}
