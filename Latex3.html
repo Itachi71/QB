@@ -41,12 +41,12 @@
       // Convert LaTeX input to HTML using latex.js with custom macro handler
       function convertLaTeXToHTML(input) {
         var generator = new latexjs.HtmlGenerator({hyphenate: false});
-        var parser = new latexjs.default(generator);
+        var macroMap = new latexjs.MacroMap(latexjs.baseMacros);
         
         // Add the custom macro handler for \bibitem
-        parser.setMacro("bibitem", new BibitemMacroHandler());
-
-        return parser.parse(input);
+        macroMap.set("bibitem", new BibitemMacroHandler());
+        
+        return latexjs.parse(input, { generator: generator, macroMap: macroMap }).domFragment();
       }
 
       convertButton.addEventListener("click", function() {
