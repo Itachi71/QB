@@ -19,8 +19,10 @@
 
 <!-- Render the LaTeX using KaTeX -->
 <script>
-  function initialize() {
-    document.getElementById("convert-button").addEventListener("click", function() {
+  document.addEventListener("DOMContentLoaded", function() {
+    var convertButton = document.getElementById("convert-button");
+    
+    convertButton.addEventListener("click", function() {
       var input = document.getElementById("latex-input").value;
       var output = document.getElementById("preview-output");
       try {
@@ -31,13 +33,7 @@
         output.style.color = 'red';
       }
     });
-  }
-
-  if (window.katex) {
-    initialize();
-  } else {
-    window.addEventListener('load', initialize);
-  }
+  });
 </script>
 </body>
 </html>
