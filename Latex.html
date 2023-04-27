@@ -3,22 +3,14 @@
 <head>
   <meta charset="utf-8">
   <title>LaTeX Preview</title>
-  <!-- Include the MathJax library -->
-  <script>
-    MathJax = {
-      tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']],
-        displayMath: [['$$', '$$'], ['\\[', '\\]']],
-        processEscapes: true
-      },
-      options: {
-        ignoreHtmlClass: 'tex2jax_ignore',
-        processHtmlClass: 'tex2jax_process'
+  <!-- Include the latex.js library and its CSS -->
+  <script src="https://cdn.jsdelivr.net/npm/latex.js/dist/latex.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/latex.js/dist/css/base.css">
+  <style>
+      #preview-output {
+          font-size: 1.5em; /* Increase the font size */
       }
-    };
-  </script>
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  </style>
 </head>
 <body>
   <h1>LaTeX Preview</h1>
@@ -30,7 +22,7 @@
   <h2>Preview:</h2>
   <div id="preview-output" style="border: 1px solid #ccc; padding: 1em; min-height: 2em;"></div>
 
-  <!-- Render the LaTeX using MathJax -->
+  <!-- Render the LaTeX using latex.js -->
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       var convertButton = document.getElementById("convert-button");
@@ -38,10 +30,10 @@
       convertButton.addEventListener("click", function() {
         var input = document.getElementById("latex-input").value;
         var output = document.getElementById("preview-output");
-        output.innerHTML = input;
         try {
-          MathJax.typesetClear();
-          MathJax.typesetPromise([output]);
+          var generator = new latexjs.HtmlGenerator({hyphenate: false});
+          var latexDoc = latexjs.parse(input, {generator: generator});
+          output.innerHTML = latexDoc.domFragment().firstChild.innerHTML;
           output.style.color = 'black';
         } catch (error) {
           output.innerHTML = 'Error: ' + error.message;
