@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <title>LaTeX Preview</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pandoc/0.1.1/pandoc.js"></script>
 </head>
 <body>
   <h1>LaTeX Preview</h1>
@@ -18,20 +19,22 @@
     document.addEventListener("DOMContentLoaded", function() {
       var convertButton = document.getElementById("convert-button");
 
-      // Load bibliography from output.html
-      function loadBibliography() {
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-          if (this.readyState == 4 && this.status == 200) {
-            document.getElementById("preview-output").innerHTML = this.responseText;
-          }
-        };
-        xhttp.open("GET", "output.html", true);
-        xhttp.send();
+      // Convert LaTeX input to HTML using pandoc.js
+      function convertLaTeXToHTML(input) {
+        return pandoc(input, { from: 'latex', to: 'html' });
       }
-      
+
       convertButton.addEventListener("click", function() {
-        loadBibliography();
+        var input = document.getElementById("latex-input").value;
+        var output = document.getElementById("preview-output");
+        try {
+          var htmlOutput = convertLaTeXToHTML(input);
+          output.innerHTML = htmlOutput;
+          output.style.color = 'black';
+        } catch (error) {
+          output.innerHTML = 'Error: ' + error.message;
+          output.style.color = 'red';
+        }
       });
     });
   </script>
