@@ -22,8 +22,7 @@
       // Convert LaTeX input to HTML using latex.js
       function convertLaTeXToHTML(input) {
         var generator = new latexjs.HtmlGenerator({hyphenate: false});
-        var parser = new latexjs.default(generator);
-        return parser.parse(input);
+        return latexjs.parse(input, { generator: generator }).domFragment();
       }
 
       convertButton.addEventListener("click", function() {
