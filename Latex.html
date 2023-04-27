@@ -9,23 +9,25 @@
 </head>
 <body>
   <h1>LaTeX Preview using KaTeX</h1>
-  <p>To display a LaTeX formula, wrap it in <code>\\( ... \\)</code> for inline or <code>\\[ ... \\]</code> for display mode.</p>
+  <p>Enter your LaTeX code below:</p>
   
-  <p>Here's an inline formula: \\( E = mc^2 \\).</p>
+  <textarea id="latex-input" rows="4" cols="50" style="display: block;"></textarea>
+  <button id="convert-button">Convert</button>
   
-  <p>Here's a display mode formula:</p>
-  \\[ x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a} \\]
+  <h2>Preview:</h2>
+  <div id="preview-output" style="border: 1px solid #ccc; padding: 1em; min-height: 2em;"></div>
 
   <!-- Render the LaTeX using KaTeX -->
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      var elements = document.getElementsByTagName("p");
-      for (var i = 0; i < elements.length; i++) {
-        var element = elements[i];
-        katex.render(element.innerHTML, element, {delimiters: [
-          {left: "\\[", right: "\\]", display: true},
-          {left: "\\(", right: "\\)", display: false}
-        ]});
+    document.getElementById("convert-button").addEventListener("click", function() {
+      var input = document.getElementById("latex-input").value;
+      var output = document.getElementById("preview-output");
+      try {
+        katex.render(input, output);
+        output.style.color = 'black';
+      } catch (error) {
+        output.innerHTML = 'Error: ' + error.message;
+        output.style.color = 'red';
       }
     });
   </script>
