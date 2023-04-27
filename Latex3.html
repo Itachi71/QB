@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <title>LaTeX Preview</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pandoc/0.1.1/pandoc.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/latex.js/dist/latex.min.js"></script>
 </head>
 <body>
   <h1>LaTeX Preview</h1>
@@ -19,9 +19,11 @@
     document.addEventListener("DOMContentLoaded", function() {
       var convertButton = document.getElementById("convert-button");
 
-      // Convert LaTeX input to HTML using pandoc.js
+      // Convert LaTeX input to HTML using latex.js
       function convertLaTeXToHTML(input) {
-        return pandoc(input, { from: 'latex', to: 'html' });
+        var generator = new latexjs.HtmlGenerator({hyphenate: false});
+        var parser = new latexjs.Parser(generator);
+        return parser.parse(input);
       }
 
       convertButton.addEventListener("click", function() {
@@ -29,7 +31,8 @@
         var output = document.getElementById("preview-output");
         try {
           var htmlOutput = convertLaTeXToHTML(input);
-          output.innerHTML = htmlOutput;
+          output.innerHTML = '';
+          output.appendChild(htmlOutput);
           output.style.color = 'black';
         } catch (error) {
           output.innerHTML = 'Error: ' + error.message;
