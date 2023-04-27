@@ -19,10 +19,34 @@
     document.addEventListener("DOMContentLoaded", function() {
       var convertButton = document.getElementById("convert-button");
 
-      // Convert LaTeX input to HTML using latex.js
+      // Custom macro handler for \bibitem
+      class BibitemMacroHandler {
+        constructor() {
+          this.env = new latexjs.Environment();
+        }
+
+        invoke(parser, symbol) {
+          let reference = parser.parseArg();
+          let marker = new latexjs.Marker();
+          this.env.marker(marker);
+          this.env.label(reference);
+
+          return new latexjs.Frag([
+            marker,
+            new latexjs.Span([new latexjs.Text('[' + reference + ']')], {classes: 'bibitem'})
+          ]);
+        }
+      }
+
+      // Convert LaTeX input to HTML using latex.js with custom macro handler
       function convertLaTeXToHTML(input) {
         var generator = new latexjs.HtmlGenerator({hyphenate: false});
-        return latexjs.parse(input, { generator: generator }).domFragment();
+        var parser = new latexjs.default(generator);
+        
+        // Add the custom macro handler for \bibitem
+        parser.setMacro("bibitem", new BibitemMacroHandler());
+
+        return parser.parse(input);
       }
 
       convertButton.addEventListener("click", function() {
