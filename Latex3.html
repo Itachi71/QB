@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>LaTeX Preview</title>
+</head>
+<body>
+  <h1>LaTeX Preview</h1>
+  <p>Enter your LaTeX code below:</p>
+  
+  <textarea id="latex-input" rows="10" cols="50" style="display: block;"></textarea>
+  <button id="convert-button">Convert</button>
+  
+  <h2>Preview:</h2>
+  <div id="preview-output" style="border: 1px solid #ccc; padding: 1em; min-height: 2em;"></div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var convertButton = document.getElementById("convert-button");
+
+      // Load bibliography from output.html
+      function loadBibliography() {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("preview-output").innerHTML = this.responseText;
+          }
+        };
+        xhttp.open("GET", "output.html", true);
+        xhttp.send();
+      }
+      
+      convertButton.addEventListener("click", function() {
+        loadBibliography();
+      });
+    });
+  </script>
+</body>
+</html>
