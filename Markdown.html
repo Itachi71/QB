@@ -204,19 +204,29 @@
     document.getElementById('convertButton').addEventListener('click', convertHtmlToMarkdown);
     document.getElementById('previewButton').addEventListener('click', showMarkdownPreview);
 function copyText(element) {
-  let textarea;
   if (element.id === "copyPreviewOutput") {
     const previewOutput = element.parentElement.querySelector("#previewOutput");
-    textarea = document.createElement("textarea");
-    textarea.value = previewOutput.innerText; // Use innerText instead of innerHTML
-    document.body.appendChild(textarea);
+
+    // Create a temporary content-editable div
+    const tempDiv = document.createElement("div");
+    tempDiv.contentEditable = true;
+    tempDiv.innerHTML = previewOutput.innerHTML;
+    document.body.appendChild(tempDiv);
+
+    // Select and copy the content from the temporary div
+    const range = document.createRange();
+    range.selectNodeContents(tempDiv);
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+    document.execCommand("copy");
+
+    // Remove the temporary div
+    document.body.removeChild(tempDiv);
   } else {
-    textarea = element.previousElementSibling;
-  }
-  textarea.select();
-  document.execCommand("copy");
-  if (element.id === "copyPreviewOutput") {
-    document.body.removeChild(textarea);
+    const textarea = element.previousElementSibling;
+    textarea.select();
+    document.execCommand("copy");
   }
 }
   </script>
