@@ -206,7 +206,7 @@
   function copyText(element) {
   let textarea;
   if (element.id === "copyPreviewOutput") {
-    const previewOutput = element.previousElementSibling;
+    const previewOutput = element.parentElement.querySelector("#previewOutput");
     textarea = document.createElement("textarea");
     textarea.value = previewOutput.innerHTML;
     document.body.appendChild(textarea);
