@@ -50,7 +50,7 @@
   width: calc(10 * 8ch); /* width for 10 columns */
   height: 475 px; /* Set the height to match #previewOutput */
   overflow: hidden; /* Change to hidden */
-  margin-bottom: 20px;
+  margin-bottom: 5px;
 }
 .copy-btn-preview {
   position: absolute;
@@ -113,7 +113,7 @@
     <div class="preview-container">
       <div id="previewOutput"></div>
     </div>
-    <span class="copy-btn-preview" onclick="copyText(this)">Copy</span>
+    <span class="copy-btn-preview" id="copyPreviewOutput" onclick="copyText(this)">Copy</span>
   </div>
 
   <script>
