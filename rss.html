@@ -15,7 +15,11 @@
 
   <script>
     const parseRSSFeed = async (url, keyword) => {
-      const parser = new RSSParser();
+      const parser = new RSSParser({
+        customFields: {
+          item: ['title', 'link'],
+        },
+      });
       const corsProxy = "https://api.allorigins.win/raw?url=";
       const feed = await parser.parseURL(corsProxy + url);
       processNews(feed, keyword);
