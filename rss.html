@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RSS Feed Filter</title>
+  <script src="https://unpkg.com/rss-parser@3.10.0/dist/rss-parser.min.js"></script>
+</head>
+<body>
+  <h1>RSS Feed Filter</h1>
+  <label for="keyword">Enter the keyword to filter news:</label>
+  <input type="text" id="keyword" name="keyword">
+  <button onclick="fetchFilteredNews()">Fetch News</button>
+  <div id="news"></div>
+
+  <script>
+    const parseRSSFeed = async (url, keyword) => {
+      const parser = new RSSParser();
+      const feed = await parser.parseURL(url);
+      processNews(feed, keyword);
+    };
+
+    const processNews = (feedData, keyword) => {
+      const newsDiv = document.getElementById("news");
+      newsDiv.innerHTML = "";
+
+      feedData.items.forEach((entry) => {
+        const title = entry.title.toLowerCase();
+
+        if (title.includes(keyword.toLowerCase())) {
+          const alertText = document.createTextNode(`ALERT: New story with keyword '${keyword}'!`);
+          const titleText = document.createTextNode("Title: " + entry.title);
+          const linkText = document.createTextNode("Link: " + entry.link);
+
+          const alertDiv = document.createElement("div");
+          const titleDiv = document.createElement("div");
+          const linkDiv = document.createElement("div");
+
+          alertDiv.appendChild(alertText);
+          titleDiv.appendChild(titleText);
+          linkDiv.appendChild(linkText);
+
+          newsDiv.appendChild(alertDiv);
+          newsDiv.appendChild(titleDiv);
+          newsDiv.appendChild(linkDiv);
+
+          const breakLine = document.createElement("br");
+          newsDiv.appendChild(breakLine);
+        }
+      });
+    };
+
+    const fetchFilteredNews = () => {
+      const rssFeedUrl = "https://globalnews.ca/sports/feed/";
+      const inputKeyword = document.getElementById("keyword").value;
+      parseRSSFeed(rssFeedUrl, inputKeyword);
+    };
+  </script>
+</body>
+</html>
