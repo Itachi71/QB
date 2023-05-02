@@ -67,6 +67,23 @@
     .copy-btn:hover {
       background-color: #0056b3;
     }
+
+    /* Table formatting CSS styles from code #2 */
+    #preview table {
+      border-collapse: collapse;
+      border-spacing: 0;
+      width: 100%;
+      margin-bottom: 1em;
+    }
+    #preview table th,
+    #preview table td {
+      border: 1px solid #ccc;
+      padding: 6px 13px;
+      text-align: left;
+    }
+    #preview table th {
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -78,20 +95,6 @@
   <div id="preview"></div>
 
   <script>
-    function processPreTags(html) {
-      const regex = /<pre>([\s\S]*?)<\/pre>/g;
-      return html.replace(regex, (match, content) => {
-        const decoded = decodeHtml(content);
-        return '<pre>' + decoded + '</pre>';
-      });
-    }
-
-    function decodeHtml(html) {
-      const textarea = document.createElement('textarea');
-      textarea.innerHTML = html;
-      return textarea.value;
-    }
-
     function renderMarkdownAndLatex() {
       const input = document.getElementById('input').value;
 
@@ -109,10 +112,7 @@
       });
 
       // Render the Markdown with the Marked library
-      let htmlOutput = marked(input);
-
-      // Process <pre> tags and replace their content with the original Markdown syntax
-      htmlOutput = processPreTags(htmlOutput);
+      const htmlOutput = marked(input);
 
       // Set the preview content to the resulting HTML
       const preview = document.getElementById('preview');
