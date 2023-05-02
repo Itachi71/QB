@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Markdown and LaTeX Renderer</title>
+  <title>Markdown, LaTeX, and HTML Renderer</title>
   
   <!-- Include the MathJax library -->
   <script>
@@ -54,12 +54,26 @@
     button:hover {
       background-color: #0056b3;
     }
+    .copy-btn {
+      display: inline-block;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 4px 8px;
+      cursor: pointer;
+      margin-left: 1em;
+      font-size: 12px;
+    }
+    .copy-btn:hover {
+      background-color: #0056b3;
+    }
   </style>
 </head>
 <body>
-  <h1>Markdown and LaTeX Renderer</h1>
-  <textarea id="input" rows="10" placeholder="Enter your Markdown and LaTeX code here"></textarea>
+  <h1>Markdown, LaTeX, and HTML Renderer</h1>
+  <textarea id="input" rows="10" placeholder="Enter your Markdown, LaTeX, and HTML code here"></textarea>
   <button id="renderButton">Render</button>
+  <button id="copyButton" class="copy-btn">Copy</button>
   <h2>Preview:</h2>
   <div id="preview"></div>
   
@@ -97,7 +111,18 @@
       MathJax.typesetPromise([preview]);
     }
 
+    function copyText() {
+      const preview = document.getElementById('preview');
+      const range = document.createRange();
+      range.selectNode(preview);
+      window.getSelection().removeAllRanges();
+      window.getSelection().addRange(range);
+      document.execCommand('copy');
+      window.getSelection().removeAllRanges();
+    }
+
     document.getElementById('renderButton').addEventListener('click', renderMarkdownAndLatex);
+    document.getElementById('copyButton').addEventListener('click', copyText);
   </script>
 </body>
 </html>
