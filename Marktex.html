@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Markdown, LaTeX, and HTML Renderer</title>
-  
+
   <!-- Include the MathJax library -->
   <script>
     MathJax = {
@@ -21,11 +21,11 @@
   </script>
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
-  
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/3.0.8/marked.min.js"></script>
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/monokai.min.css">
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
-  
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -76,22 +76,25 @@
   <button id="copyButton" class="copy-btn">Copy</button>
   <h2>Preview:</h2>
   <div id="preview"></div>
-  
+
   <script>
     function renderMarkdownAndLatex() {
       const input = document.getElementById('input').value;
 
-      // Customize the marked renderer to include the language class in the <code> tags
+      // Customize the marked renderer to include the language class in the <code> tags and handle tables
       const renderer = new marked.Renderer();
-      renderer.code = function(code, language) {
+      renderer.code = function (code, language) {
         return '<pre><code class="' + language + '">' + code + '</code></pre>';
+      };
+      renderer.table = function (header, body) {
+        return '<table>\n<thead>\n' + header + '</thead>\n<tbody>\n' + body + '</tbody>\n</table>\n';
       };
 
       // Enable GitHub Flavored Markdown and table support
       marked.setOptions({
         gfm: true,
         tables: true,
-        renderer: renderer
+        renderer: renderer,
       });
 
       // Render the Markdown with the Marked library
