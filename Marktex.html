@@ -22,7 +22,6 @@
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 
-  <script src="https://unpkg.com/turndown@7.1.1/dist/turndown.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/3.0.8/marked.min.js"></script>
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/monokai.min.css">
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
@@ -79,35 +78,22 @@
   <div id="preview"></div>
 
   <script>
+    function processPreTags(html) {
+      const regex = /<pre>([\s\S]*?)<\/pre>/g;
+      return html.replace(regex, (match, content) => {
+        const decoded = decodeHtml(content);
+        return '<pre>' + decoded + '</pre>';
+      });
+    }
+
+    function decodeHtml(html) {
+      const textarea = document.createElement('textarea');
+      textarea.innerHTML = html;
+      return textarea.value;
+    }
+
     function renderMarkdownAndLatex() {
       const input = document.getElementById('input').value;
-
-      // Create a TurndownService instance with custom rules for tables and blockquotes
-      var turndownService = new TurndownService();
-      turndownService.addRule('tables', {
-        filter: ['table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td'],
-        replacement: function(content, node) {
-          if (node.nodeName === 'TABLE') {
-            return '\n\n' + content + '\n\n';
-          } else if (node.nodeName === 'THEAD' || node.nodeName === 'TBODY' || node.nodeName === 'TFOOT') {
-            return content;
-          } else if (node.nodeName === 'TR') {
-            return content + '\n';
-          } else if (node.nodeName === 'TH' || node.nodeName === 'TD') {
-            return '|' + content;
-          }
-        }
-      });
-
-      turndownService.addRule('blockquotes', {
-        filter: 'blockquote',
-        replacement: function(content) {
-          return '> ' + content;
-        }
-      });
-
-      // Convert the input (which can contain HTML, Markdown, and LaTeX) to Markdown
-      const markdownOutput = turndownService.turndown(input);
 
       // Customize the marked renderer to include the language class in the <code> tags
       const renderer = new marked.Renderer();
@@ -123,7 +109,10 @@
       });
 
       // Render the Markdown with the Marked library
-      const htmlOutput = marked(markdownOutput);
+      let htmlOutput = marked(input);
+
+      // Process <pre> tags and replace their content with the original Markdown syntax
+      htmlOutput = processPreTags(htmlOutput);
 
       // Set the preview content to the resulting HTML
       const preview = document.getElementById('preview');
