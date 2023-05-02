@@ -61,7 +61,7 @@
       background-color: #0056b3;
     }
 
-    /* Table formatting CSS styles from code #2 */
+    /* Table formatting CSS styles */
     #preview table {
       border-collapse: collapse;
       border-spacing: 0;
@@ -112,12 +112,33 @@
   </div>
 
   <script>
+    function extractLatex(text) {
+      const latexRegex = /\$[^\$]*\$/g;
+      const matches = [];
+      let match;
+
+      while ((match = latexRegex.exec(text)) !== null) {
+        matches.push(match[0]);
+      }
+
+      const placeholders = matches.map((_, index) => `@@latex-${index}@@`);
+      const textWithoutLatex = text.replace(latexRegex, () => placeholders.shift());
+
+      return { textWithoutLatex, matches };
+    }
+
+    function insertLatex(text, matches) {
+      const placeholderRegex = /@@latex-\d+@@/g;
+      return text.replace(placeholderRegex, () => matches.shift());
+    }
+
     function renderMarkdownAndLatex() {
       const input = document.getElementById('input').value;
+      const { textWithoutLatex, matches } = extractLatex(input);
 
       // Customize the marked renderer to include the language class in the <code> tags
       const renderer = new marked.Renderer();
-      renderer.code = function(code, language) {
+      renderer.code = function (code, language) {
         return '<pre><code class="' + language + '">' + code + '</code></pre>';
       };
 
@@ -125,15 +146,18 @@
       marked.setOptions({
         gfm: true,
         tables: true,
-        renderer: renderer
+        renderer: renderer,
       });
 
       // Render the Markdown with the Marked library
-      const htmlOutput = marked(input);
+      const htmlOutput = marked(textWithoutLatex);
+
+      // Reinsert LaTeX
+      const htmlWithLatex = insertLatex(htmlOutput, matches);
 
       // Set the preview content to the resulting HTML
       const preview = document.getElementById('preview');
-      preview.innerHTML = htmlOutput;
+      preview.innerHTML = htmlWithLatex;
 
       // Highlight code blocks in the preview div
       preview.querySelectorAll('pre code').forEach((block) => {
@@ -144,7 +168,6 @@
       MathJax.typesetClear();
       MathJax.typesetPromise([preview]);
     }
-
     function copyText() {
       const preview = document.getElementById('preview');
       const range = document.createRange();
