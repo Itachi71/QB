@@ -3,64 +3,101 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RSS Feed Filter</title>
-</head>
-<body>
-  <h1>RSS Feed Filter</h1>
-  <label for="keyword">Enter the keyword to filter news:</label>
-  <input type="text" id="keyword" name="keyword">
-  <button onclick="fetchFilteredNews()">Fetch News</button>
-  <div id="news"></div>
-
+  <title>Markdown and LaTeX Renderer</title>
+  
+  <!-- Include the MathJax library -->
   <script>
-    const parseRSSFeed = async (url, keyword) => {
-      const corsProxy = "https://api.allorigins.win/raw?url=";
-      const response = await fetch(corsProxy + url);
-      const xmlData = await response.text();
-      const parser = new DOMParser();
-      const xmlDoc = parser.parseFromString(xmlData, "application/xml");
-      processNews(xmlDoc, keyword);
-    };
-
-    const processNews = (xmlDoc, keyword) => {
-      const newsDiv = document.getElementById("news");
-      newsDiv.innerHTML = "";
-      const items = xmlDoc.getElementsByTagName("item");
-
-      for (let i = 0; i < items.length; i++) {
-        const titleElement = items[i].getElementsByTagName("title")[0];
-        const title = titleElement.textContent.toLowerCase();
-
-        if (title.includes(keyword.toLowerCase())) {
-          const linkElement = items[i].getElementsByTagName("link")[0];
-          
-          const alertText = document.createTextNode(`ALERT: New story with keyword '${keyword}'!`);
-          const titleText = document.createTextNode("Title: " + titleElement.textContent);
-          const linkText = document.createTextNode("Link: " + linkElement.textContent);
-
-          const alertDiv = document.createElement("div");
-          const titleDiv = document.createElement("div");
-          const linkDiv = document.createElement("div");
-
-          alertDiv.appendChild(alertText);
-          titleDiv.appendChild(titleText);
-          linkDiv.appendChild(linkText);
-
-          newsDiv.appendChild(alertDiv);
-          newsDiv.appendChild(titleDiv);
-          newsDiv.appendChild(linkDiv);
-
-          const breakLine = document.createElement("br");
-          newsDiv.appendChild(breakLine);
-        }
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
       }
     };
+  </script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/3.0.8/marked.min.js"></script>
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/monokai.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
+  
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    textarea {
+      width: 100%;
+      box-sizing: border-box;
+      resize: vertical;
+    }
+    #preview {
+      border: 1px solid #ccc;
+      padding: 1em;
+      min-height: 2em;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      cursor: pointer;
+      margin-top: 1em;
+      margin-bottom: 1em;
+      font-size: 14px;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>Markdown and LaTeX Renderer</h1>
+  <textarea id="input" rows="10" placeholder="Enter your Markdown and LaTeX code here"></textarea>
+  <button id="renderButton">Render</button>
+  <h2>Preview:</h2>
+  <div id="preview"></div>
+  
+  <script>
+    function renderMarkdownAndLatex() {
+      const input = document.getElementById('input').value;
 
-    const fetchFilteredNews = () => {
-      const rssFeedUrl = "https://globalnews.ca/sports/feed/";
-      const inputKeyword = document.getElementById("keyword").value;
-      parseRSSFeed(rssFeedUrl, inputKeyword);
-    };
+      // Customize the marked renderer to include the language class in the <code> tags
+      const renderer = new marked.Renderer();
+      renderer.code = function(code, language) {
+        return '<pre><code class="' + language + '">' + code + '</code></pre>';
+      };
+
+      // Enable GitHub Flavored Markdown and table support
+      marked.setOptions({
+        gfm: true,
+        tables: true,
+        renderer: renderer
+      });
+
+      // Render the Markdown with the Marked library
+      const htmlOutput = marked(input);
+
+      // Set the preview content to the resulting HTML
+      const preview = document.getElementById('preview');
+      preview.innerHTML = htmlOutput;
+
+      // Highlight code blocks in the preview div
+      preview.querySelectorAll('pre code').forEach((block) => {
+        hljs.highlightElement(block);
+      });
+
+      // Render LaTeX using the MathJax library
+      MathJax.typesetClear();
+      MathJax.typesetPromise([preview]);
+    }
+
+    document.getElementById('renderButton').addEventListener('click', renderMarkdownAndLatex);
   </script>
 </body>
 </html>
