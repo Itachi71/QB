@@ -84,15 +84,31 @@
     #preview table th {
       font-weight: bold;
     }
+
+    /* Styles for the side-by-side layout */
+    .content-container {
+      display: flex;
+      justify-content: space-between;
+    }
+    .input-container,
+    .output-container {
+      width: 49%;
+    }
   </style>
 </head>
 <body>
   <h1>Markdown, LaTeX, and HTML Renderer</h1>
-  <textarea id="input" rows="10" placeholder="Enter your Markdown, LaTeX, and HTML code here"></textarea>
-  <button id="renderButton">Render</button>
-  <button id="copyButton" class="copy-btn">Copy</button>
-  <h2>Preview:</h2>
-  <div id="preview"></div>
+  <div class="content-container">
+    <div class="input-container">
+      <textarea id="input" rows="10" placeholder="Enter your Markdown, LaTeX, and HTML code here"></textarea>
+      <button id="renderButton">Render</button>
+      <button id="copyButton" class="copy-btn">Copy</button>
+    </div>
+    <div class="output-container">
+      <h2>Preview:</h2>
+      <div id="preview"></div>
+    </div>
+  </div>
 
   <script>
     function renderMarkdownAndLatex() {
