@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Markdown, LaTeX, and HTML Renderer</title>
+
+  <!-- Include the KaTeX library -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css" integrity="sha384-R4558gYOUz8mP9YWpZJjofhk+zx0Np0z0B7Nj7bpoKfdI2xnybTj9U8J8U6zn0a6" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js" integrity="sha384-R4558gYOUz8mP9YWpZJjofhk+zx0Np0z0B7Nj7bpoKfdI2xnybTj9U8J8U6zn0a6" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/3.0.8/marked.min.js"></script>
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/monokai.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    h1 {
+      margin-top: 1rem;
+    }
+    textarea {
+      box-sizing: border-box;
+      resize: vertical;
+    }
+    #preview {
+      border: 1px solid #ccc;
+      padding: 1em;
+      min-height: 2em;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      cursor: pointer;
+      margin-top: 1em;
+      margin-bottom: 1em;
+      font-size: 14px;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Table formatting CSS styles */
+    #preview table {
+      border-collapse: collapse;
+      border-spacing: 0;
+      width: 100%;
+      margin-bottom: 1em;
+    }
+    #preview table th,
+    #preview table td {
+      border: 1px solid #ccc;
+      padding: 6px 13px;
+      text-align: left;
+    }
+    #preview table th {
+      font-weight: bold;
+    }
+
+    /* Styles for the side-by-side layout */
+    .content-container {
+      display: flex;
+      justify-content: space-between;
+      flex: 1;
+      overflow: hidden;
+    }
+    .input-container,
+    .output-container {
+      width: 49%;
+      display: flex;
+      flex-direction: column;
+    }
+    .input-container textarea,
+    .output-container #preview {
+      flex: 1;
+      overflow: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>Markdown, LaTeX, and HTML Renderer</h1>
+  <div class="content-container">
+    <div class="input-container">
+      <textarea id="input" rows="10" placeholder="Enter your Markdown, LaTeX, and HTML code here"></textarea>
+      <button id="renderButton">Render</button>
+      <button id="copyButton">Copy</button>
+    </div>
+    <div class="output-container">
+      <div id="preview"></div>
+    </div>
+  </div>
+
+  <script>
+    function extractLatex(text) {
+      const latexRegex = /\\[a-zA-Z]+|(\$[^\$]*\$)/g;
+      const matches = [];
+      let match;
+
+      while ((match = latexRegex.exec(text)) !== null) {
+        matches.push(match[0]);
+      }
+
+      const placeholders = matches.map((_, index) => `@@latex-${index}@@`);
+      const textWithoutLatex = text.replace(latexRegex, () => placeholders.shift());
+
+      return { textWithoutLatex, matches };
+    }
+
+    function insertLatex(text, matches) {
+      const placeholderRegex = /@@latex-\d+@@/g;
+      return text.replace(placeholderRegex, () => '<span class="katex-element">' + matches.shift() + '</span>');
+    }
+
+    function renderMarkdownAndLatex() {
+      const input = document.getElementById('input').value;
+      const { textWithoutLatex, matches } = extractLatex(input);
+
+      // Customize the marked renderer to include the language class in the <code> tags
+      const renderer = new marked.Renderer();
+      renderer.code = function (code, language) {
+        return '<pre><code class="' + language + '">' + code + '</code></pre>';
+      };
+
+      // Enable GitHub Flavored Markdown and table support
+      marked.setOptions({
+        gfm: true,
+        tables: true,
+        renderer: renderer,
+      });
+
+      // Render the Markdown with the Marked library
+      const htmlOutput = marked(textWithoutLatex);
+
+      // Reinsert LaTeX
+      const htmlWithLatex = insertLatex(htmlOutput, matches);
+
+      // Set the preview content to the resulting HTML
+      const preview = document.getElementById('preview');
+      preview.innerHTML = htmlWithLatex;
+
+      // Highlight code blocks in the preview div
+      preview.querySelectorAll('pre code').forEach((block) => {
+        hljs.highlightElement(block);
+      });
+
+      // Render LaTeX using the KaTeX library
+      preview.querySelectorAll('.katex-element').forEach((el) => {
+        const latex = el.textContent;
+        const rendered = katex.renderToString(latex, {throwOnError: false});
+        el.innerHTML = rendered;
+      });
+    }
+
+    function copyText() {
+      const preview = document.getElementById('preview');
+      const range = document.createRange();
+      range.selectNode(preview);
+      window.getSelection().removeAllRanges();
+      window.getSelection().addRange(range);
+      document.execCommand('copy');
+      window.getSelection().removeAllRanges();
+    }
+
+    document.getElementById('renderButton').addEventListener('click', renderMarkdownAndLatex);
+    document.getElementById('copyButton').addEventListener('click', copyText);
+  </script>
+</body>
+</html>
